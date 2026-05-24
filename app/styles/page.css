@@ -1,0 +1,43 @@
+.landing-page{
+    background-color: #ede8ce;
+}
+
+#connect{
+    background-color: #049a24;
+    color: white;
+}
+
+.landing-header{
+    color: purple;
+    font-size: 30px;
+    text-align: center;
+    position: relative;
+    top: 30px;
+}
+
+#dark_purple_star1{
+    width: 200px;
+    height: 175px;
+    position: relative;
+    left: 250px;
+    bottom: 25px;
+    transform: rotate(58deg);
+}
+
+#light_purple_star1{
+    width: 175px;
+    height: 150px;
+    position: relative;
+    left: 35px;
+    bottom: 30px;
+    transform: rotate(60deg);
+}
+
+#dark_purple_star2{
+    width: 150px;
+    height: 125px;
+    position: relative;
+    left: 280px;
+    bottom: 100px;
+    transform: rotate(90deg);
+}
