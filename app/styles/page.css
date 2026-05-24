@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
+
 .landing-page{
     background-color: #ede8ce;
 }
@@ -9,18 +11,22 @@
 
 .landing-header{
     color: purple;
-    font-size: 30px;
+    font-size: 60px;
     text-align: center;
     position: relative;
     top: 30px;
+    font-family:"Bodoni Moda", serif;
+    font-weight: 550;
+
+
 }
 
 #dark_purple_star1{
     width: 200px;
     height: 175px;
     position: relative;
-    left: 250px;
-    bottom: 25px;
+    left: 215px;
+    bottom: 30px;
     transform: rotate(58deg);
 }
 
@@ -28,7 +34,7 @@
     width: 175px;
     height: 150px;
     position: relative;
-    left: 35px;
+    left: 25px;
     bottom: 30px;
     transform: rotate(60deg);
 }
@@ -37,7 +43,7 @@
     width: 150px;
     height: 125px;
     position: relative;
-    left: 280px;
-    bottom: 100px;
+    left: 260px;
+    bottom: 110px;
     transform: rotate(90deg);
 }
