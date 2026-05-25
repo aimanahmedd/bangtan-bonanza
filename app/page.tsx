@@ -1,65 +1,57 @@
-import Image from "next/image";
+'use client'
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import Image from 'next/image'
+import "@/app/styles/page.css"
+import dark_purple_star from "../app/assets/dark_purple_star.png"
+import light_purple_star from "../app/assets/light_purple_star.png"
+import bts_ot7 from "../app/assets/bts_ot7.jpg"
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+
+export default function LandingPage(){
+    const router = useRouter()
+    //checks for token in URL
+    useEffect(() => {
+  const params = new URLSearchParams(window.location.search)
+  const token = params.get('token')
+  const error = params.get('error')
+
+  if (token) {
+    localStorage.setItem('spotify_token', token)
+    // clean the token out of the URL
+    window.history.replaceState({}, '', '/')
+    // redirect to the quiz
+    router.push('/home')
+  }
+
+  if (error) {
+    // show an error message
+    console.error('Spotify auth error:', error)
+  }
+}, [router])
+
+
+    return(
+        <div className = "landing-page">
+
+        <div className="information-section">
+        <h1 id="landing-header">BANGTAN BONANZA</h1>
+        <p id="landing-subsection">The website for when you know you want to listen to BTS but are unsure of the right songs at the moment🙃</p>
+        <Image src = {bts_ot7} alt = "BTS Group Picture" id="bts-ot7"></Image>
+
+
+        <Image src = {dark_purple_star} alt = "Dark Purple Star 1" id="dark-purple-star1"></Image>
+        <Image src = {light_purple_star} alt = "Light Purple Star 1" id="light-purple-star1"></Image>
+        <Image src = {dark_purple_star} alt = "Dark Purple Star 2" id="dark-purple-star2"></Image>
+
+        <Image src = {light_purple_star} alt = "Light Purple Star 2" id="light-purple-star2"></Image>
+        <Image src = {light_purple_star} alt = "Light Purple Star 3" id="light-purple-star3"></Image>
+        <Image src = {dark_purple_star} alt = "Dark Purple Star 3" id="dark-purple-star3"></Image>
+</div>  
+        <div className="connect-section">
+        <a id="connect" href="/api/auth/login">Connect to Spotify</a>
+        <p id="data-safe">We only access your Spotify to create playlists. Your data is safe &lt;3</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
         </div>
-      </main>
-    </div>
-  );
+    )
 }
