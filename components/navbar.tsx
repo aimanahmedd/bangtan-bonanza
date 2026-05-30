@@ -4,6 +4,7 @@ import dark_star from "../app/assets/dark_purple_star.png"
 import light_star from "../app/assets/light_purple_star.png"
 import { usePathname } from "next/navigation"
 import Image from 'next/image'
+import "@/app/styles/navbar.css"
 //import path from "path"
 
 
