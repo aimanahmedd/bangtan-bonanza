@@ -23,7 +23,7 @@ export default function Navbar(){
 
                 <div className="navbar-links">
                     <Link href="/home" className={pathname==="/home" ? "active" : ""}>Home</Link>
-                    <Link href="/quiz" className={pathname==="/quiz" ? "active" : ""}>Quiz</Link>
+                    <Link href="/vibe" className={pathname==="/vibe" ? "active" : ""}>Vibe</Link>
                     <Link href="/allPlaylists" className={pathname==="/allPlaylists" ? "active" : ""}>Playlists</Link>
                 </div>
 

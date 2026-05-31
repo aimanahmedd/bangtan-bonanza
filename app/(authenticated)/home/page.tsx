@@ -30,7 +30,7 @@ export default function HomePage() {
           <Card body className="quiz-card">
             <Card.Title id="card-title">BTS PLAYLIST MODD QUIZ</Card.Title>
             <Card.Text id="card-text">Describe how you are feeling with the guided questions or your own words and get your very own generated playlist!</Card.Text>
-            <a id="go-to-quiz" href="/quiz">Quiz</a>
+            <a id="go-to-vibe" href="/vibe">Vibe</a>
           </Card>
     </div>
   )
