@@ -1,0 +1,22 @@
+.quiz-card{
+    border-radius: 15px;
+    border-color: black;
+    background-color: white;
+    height: 450px;
+    width: 750px;
+    margin-left: 400px;
+}
+
+#card-title{
+    color: black;
+}
+
+#card-text{
+    color: black;
+}
+
+#go-to-quiz{
+    color: purple;
+    height: 50px;
+    width: 50px
+}
