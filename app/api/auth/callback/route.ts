@@ -37,6 +37,6 @@ export async function GET(request: NextRequest) {
 
   // redirect to frontend with token in URL
   return Response.redirect(
-    `http://127.0.0.1:3000/?token=${data.access_token}`
+    `http://127.0.0.1:3000/home?token=${data.access_token}`
   )
 }
