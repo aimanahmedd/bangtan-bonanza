@@ -3,16 +3,18 @@
 import {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import Image from 'next/image'
+import "@/app/styles/vibe.css"
 
-import rm from "@/app/assets/rm_good.jpg"
-import jin from "@/app/assets/jin_good.jpg"
-import suga from "@/app/assets/suga_good.jpg"
-import jhope from "@/app/assets/jhope_good.jpg"
-import jimin from "@/app/assets/jimin_good.jpg"
-import v from "@/app/assets/v_good.jpg"
-import jungkook from "@/app/assets/jungkook_good.jpg"
+
+import rm from "@/app/assets/RM_ARIRANG.webp"
+import jin from "@/app/assets/JIN_ARIRANG.webp"
+import suga from "@/app/assets/SUGA_ARIRANG.webp"
+import jhope from "@/app/assets/JHOPE_ARIRANG.webp"
+import jimin from "@/app/assets/JIMIN_ARIRANG.webp"
+import v from "@/app/assets/V_ARIRANG.webp"
+import jungkook from "@/app/assets/JK_ARIRANG.webp"
 import { navigate } from 'next/dist/client/components/segment-cache/navigation'
-import { Card, Form } from 'react-bootstrap'
+import { Button, Card, Form } from 'react-bootstrap'
 import { image } from 'framer-motion/client'
 
 const MEMBERS = [
@@ -26,6 +28,9 @@ const MEMBERS = [
 
 ]
 
+const top_row = MEMBERS.slice(0,4);
+const bottom_row = MEMBERS.slice(4)
+
 export default function QuizSection({navigateTo}: {navigateTo: (page: string) => void}){
   //to keep track of how many multiple choice questions answers we need and have
   const [mcqAnswers, setMcqAnswers] = useState<string[]>(new Array(5).fill(""));
@@ -33,7 +38,6 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
 
   //to keep track of how many written questions answers we need and have
   const [writtenAnswer, setWrittenAnswer] = useState<string[]>([]);
-  const [writtenAnswered, setWrittenAnswered] = useState<boolean[]>(new Array(5).fill(false));
 
   //to keep track of how many bias questions answers we need and have
   const [biasAnswers, setBiasAnswers] = useState<string[]>([]);
@@ -59,30 +63,28 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
     updatedWrittenAnswers[questionIndex] = value
 
     //updating questions array to include that another multiple choice
-    const updatedWrittenAnswered = [...writtenAnswered];
-    updatedWrittenAnswered[questionIndex] = true;
 
     setWrittenAnswer(updatedWrittenAnswers);
-    setWrittenAnswered(updatedWrittenAnswered)
   }
 
   const chooseBiases = (bias: string, checked: boolean) =>{
     if(checked){
       const updated = [...biasAnswers, bias];
       setBiasAnswers(updated);
-      if (biasAnswers.length === 0){
-        setBiasAnswered(biasAnswered); 
-      }
+      setBiasAnswered(updated.length>0)
     } else{
       const updated = biasAnswers.filter((chosen) => chosen != bias);
       setBiasAnswers(updated);
-
-      if (updated.length === 0){
-        setBiasAnswered(biasAnswered); 
-      }
+      setBiasAnswered(updated.length > 0);
     }
-  }
+    }
+  
 
+  const answeredAllMCQs = mcqAnswered.every((answered)=> answered === true);
+
+  const canGeneratePlaylist = biasAnswered && (answeredAllMCQs || writtenAnswer.length > 0)
+
+  console.log({ biasAnswered, answeredAllMCQs, writtenAnswerLen: writtenAnswer.length, biasAnswers, mcqAnswered });
       return(
         /*Quiz questions!*/
     <div className="quiz-content">
@@ -98,7 +100,7 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
             <Form.Check type="radio" label="Energetic and ready to party" name="q1" onChange={()=> handleMcqAnswer(0, "Energetic and ready to party")}/>
             <Form.Check type="radio" label="Romantic and loving" name="q1" onChange={()=> handleMcqAnswer(0, "Romantic and loving")}/>
             <Form.Check type="radio" label="Nostalgic and introspective" name="q1" onChange={()=> handleMcqAnswer(0, "Nostalgic and introspective")}/>
-            <Form.Check type="radio" label="Sad and reflective" name="q1" onChange={()=> handleMcqAnswer(0, "Nostalgic and reflective")}/>
+            <Form.Check type="radio" label="Sad and reflective" name="q1" onChange={()=> handleMcqAnswer(0, "Sad and reflective")}/>
           </Form>
           <h5>2. What are you trying to accomplish?</h5>
           <Form>
@@ -114,7 +116,7 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
             <Form.Check type="radio" label="High and energetic" name="q3" onChange={()=> handleMcqAnswer(2, "High and energetic")}/>
             <Form.Check type="radio" label="Fluctuating and changing" name="q3" onChange={()=> handleMcqAnswer(2, "Fluctuating and changing")}/>
             <Form.Check type="radio" label="Tired but fulfilled" name="q3" onChange={()=> handleMcqAnswer(2, "Tired but fulfilled")}/>
-            <Form.Check type="radio" label="Low and depleted" name="q2" onChange={()=> handleMcqAnswer(2, "Low and depleted")}/>
+            <Form.Check type="radio" label="Low and depleted" name="q3" onChange={()=> handleMcqAnswer(2, "Low and depleted")}/>
           </Form>
           <h5>4. Which of these settings sound the most relaxing at the moment?</h5>
           <Form>
@@ -146,22 +148,40 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
         </div>
         <div className='bias-select'>
           <h4>Pick your bias</h4>
-          <div className="members-grid">
-            {MEMBERS.map(member =>(
-              <Form.Check
-              key={member.id}
-              type="checkbox"
-              label={member.name}
-              onChange={(e)=>chooseBiases(member.name, e.target.checked)}
-              className="form-check"
-              checked={biasAnswers.includes(member.id)}
-              >
-              <Image
-              src={member.photo}
-              alt={member.name}/>
+          <div className="top-members">
+            {top_row.map(member =>(
+            <Form.Check key={member.id} type="checkbox" className="form-check">
+              <Form.Check.Input
+              checked = {biasAnswers.includes(member.id)}
+              onChange={(e) => chooseBiases(member.id, e.target.checked)}
+              />
+              <Form.Check.Label>
+                {member.name}
+                <Image src={member.photo} alt={member.name} width={200}/>
+              </Form.Check.Label>
               </Form.Check>
             ))}
           </div>
+          <div className="bottom-members">
+            {bottom_row.map(member =>(
+            <Form.Check key={member.id} type="checkbox" className="form-check">
+              <Form.Check.Input
+              checked = {biasAnswers.includes(member.id)}
+              onChange={(e) => chooseBiases(member.id, e.target.checked)}
+              />
+              <Form.Check.Label>
+                {member.name}
+                <Image src={member.photo} alt={member.name} width={200}/>
+              </Form.Check.Label>
+              </Form.Check>
+            ))}
+          </div>
+        </div>
+        <div className='text-center my-4'>
+          <Button
+            className="custom-button"
+
+          >Submit</Button>
         </div>
     </div>
     )
