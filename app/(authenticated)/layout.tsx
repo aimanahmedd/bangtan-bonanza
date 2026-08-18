@@ -1,5 +1,7 @@
 import React from 'react'
 import Navbar from "@/components/navbar"
+import "bootstrap/dist/css/bootstrap.min.css";
+//import "./globals.css";
 
 const Layout = ({ children }: {children: React.ReactNode})=>{
     return (
