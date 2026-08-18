@@ -13,9 +13,7 @@ import jhope from "@/app/assets/JHOPE_ARIRANG.webp"
 import jimin from "@/app/assets/JIMIN_ARIRANG.webp"
 import v from "@/app/assets/V_ARIRANG.webp"
 import jungkook from "@/app/assets/JK_ARIRANG.webp"
-import { navigate } from 'next/dist/client/components/segment-cache/navigation'
 import { Button, Card, Form } from 'react-bootstrap'
-import { image } from 'framer-motion/client'
 
 const MEMBERS = [
   {id: 'rm', name: 'RM', photo: rm},
@@ -31,13 +29,13 @@ const MEMBERS = [
 const top_row = MEMBERS.slice(0,4);
 const bottom_row = MEMBERS.slice(4)
 
-export default function QuizSection({navigateTo}: {navigateTo: (page: string) => void}){
+export default function QuizSection(){
   //to keep track of how many multiple choice questions answers we need and have
   const [mcqAnswers, setMcqAnswers] = useState<string[]>(new Array(5).fill(""));
   const [mcqAnswered, setMcqAnswered] = useState<boolean[]>(new Array(5).fill(false));
 
   //to keep track of how many written questions answers we need and have
-  const [writtenAnswer, setWrittenAnswer] = useState<string[]>([]);
+  const [writtenAnswer, setWrittenAnswer] = useState<string>('');
 
   //to keep track of how many bias questions answers we need and have
   const [biasAnswers, setBiasAnswers] = useState<string[]>([]);
@@ -57,14 +55,8 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
     setMcqAnswered(updatedMCqAnswered)
   }
 
-    const handleWrittenAnswer = (questionIndex: number, value: string) =>{
-    //updating index to include new answer from multiple choice questions
-    const updatedWrittenAnswers = [...writtenAnswer];
-    updatedWrittenAnswers[questionIndex] = value
-
-    //updating questions array to include that another multiple choice
-
-    setWrittenAnswer(updatedWrittenAnswers);
+    const handleWrittenAnswer = (value: string) =>{
+      setWrittenAnswer(value);
   }
 
   const chooseBiases = (bias: string, checked: boolean) =>{
@@ -79,10 +71,24 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
     }
     }
   
+  const router = useRouter();
 
   const answeredAllMCQs = mcqAnswered.every((answered)=> answered === true);
 
-  const canGeneratePlaylist = biasAnswered && (answeredAllMCQs || writtenAnswer.length > 0)
+  const hasWrittenAnswer = writtenAnswer[0]?.trim().length > 0;
+
+  const canGeneratePlaylist = biasAnswered && (answeredAllMCQs || hasWrittenAnswer)
+
+  const handleSubmit = () =>{
+    localStorage.setItem("lastVibeAnswers", JSON.stringify(
+      {
+        mcqAnswers,
+        writtenAnswer: writtenAnswer[0] || '',
+        bias: biasAnswers
+      }
+    ))
+    router.push('/playlist/test')
+  }
 
   console.log({ biasAnswered, answeredAllMCQs, writtenAnswerLen: writtenAnswer.length, biasAnswers, mcqAnswered });
       return(
@@ -132,7 +138,7 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
             <Form.Check type="radio" label="Lively" name="q5" onChange={()=> handleMcqAnswer(4, "Lively")}/>
             <Form.Check type="radio" label="Romantic" name="q5" onChange={()=> handleMcqAnswer(4, "Romantic")}/>
             <Form.Check type="radio" label="Wistful" name="q5" onChange={()=> handleMcqAnswer(4, "Wistful")}/>
-            <Form.Check type="radio" label="Deep and meditation" name="q5" onChange={()=> handleMcqAnswer(4, "Deep and meditation")}/>
+            <Form.Check type="radio" label="Deep and Meditative" name="q5" onChange={()=> handleMcqAnswer(4, "Deep and meditation")}/>
           </Form>
         </div>
          {/*written response question*/}
@@ -141,7 +147,7 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
           <h5>Describe your current vibe!</h5>
           <Form>
             <Form.Group controlId="q6">
-              <Form.Control type='text' placeholder="Type your answer here" value={writtenAnswer[0]} onChange={(e)=> handleWrittenAnswer(0, e.target.value)}
+              <Form.Control type='text' placeholder="Type your answer here" value={writtenAnswer[0]} onChange={(e)=> handleWrittenAnswer(e.target.value)}
               className="form-controlId"/>
             </Form.Group>
           </Form>
@@ -180,7 +186,8 @@ export default function QuizSection({navigateTo}: {navigateTo: (page: string) =>
         <div className='text-center my-4'>
           <Button
             className="custom-button"
-
+            disabled={!canGeneratePlaylist}
+            onClick={handleSubmit}
           >Submit</Button>
         </div>
     </div>
