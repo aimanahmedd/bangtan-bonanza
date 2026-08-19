@@ -87,7 +87,7 @@ export default function QuizSection(){
         bias: biasAnswers
       }
     ))
-    router.push('/playlist/test')
+    router.push('/generate')
   }
 
   console.log({ biasAnswered, answeredAllMCQs, writtenAnswerLen: writtenAnswer.length, biasAnswers, mcqAnswered });
